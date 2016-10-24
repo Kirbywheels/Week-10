@@ -5,7 +5,8 @@ This repository contains files for:
   - `/Commands`
   - `/Lab`
   - `/Slides`
-  - `LICENSE.md`
+  - `LICENSE_CODE.md`
+  - `LICENSE_TEXT.md`
   - `README.md`
   - `.gitignore`
 
