@@ -23,7 +23,7 @@ Ho: mean = 54                                    degrees of freedom =      199
  Pr(T < t) = 0.0184         Pr(|T| > |t|) = 0.0369          Pr(T > t) = 0.9816
  ```
 
-![fig1](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-10-Replicati%20on/Plots/fig1.png)
+![fig1](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-10-Replication/Plots/fig1.png)
 
 **1.** The results of the one-sample t-test (t = -2.101; p = .037) indicate that these data are not drawn from where the average score is 54.
 
@@ -44,7 +44,7 @@ Ho: mean = 54                                    degrees of freedom =      199
  Pr(T < t) = 0.0012         Pr(|T| > |t|) = 0.0024          Pr(T > t) = 0.9988
  ```
 
-![fig2](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-10-Replicati%20on/Plots/fig2.png)
+![fig2](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-10-Replication/Plots/fig2.png)
 
 **2.** Like question **1**, the results of the one-sample t-test (t = -3.071; p = .002) indicate that these data are not drawn from where the average score is 54.
 
@@ -108,7 +108,7 @@ Effect size based on mean comparison
 ---------------------------------------------------------
 ```
 
-![fig3](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-10-Replicati%20on/Plots/fig3.png)
+![fig3](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-10-Replication/Plots/fig3.png)
 
 **5.** The results of the independent t-test (t = 1.812; p = .0714; d = .257) indicate that there is not a substantive difference in mean science scores between males and fe males in this sample.
 
@@ -135,7 +135,7 @@ Variable |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
  Pr(T < t) = 0.7180         Pr(|T| > |t|) = 0.5641          Pr(T > t) = 0.2820
  ```
 
-![fig4](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-10-Replicati%20on/Plots/fig4.png)
+![fig4](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-10-Replication/Plots/fig4.png)
 
 **8.** The results of the dependent t-test (t = .578; p = 0.564; d = .257) indicate that there is not a substantive difference between mean writing and social science s cores in this sample.
 
