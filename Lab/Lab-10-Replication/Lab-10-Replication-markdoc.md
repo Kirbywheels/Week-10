@@ -171,33 +171,33 @@ Estimated sample sizes:
 
 **10.** Based on the output above in question **5**, we estimate a mean science score for men as 53, for women as 51.020, with a standard deviation of 9.901, as pilot data to construct the power analysis. To detect a small effect size with a power of 0.8, a sample size of 788 would be required with a minimum of 394 in each group.
 
+```stata
 . local effectSize = 9.900891\*.5
 
-          . local lowerMean = 53-`effectSize'
+. local lowerMean = 53-`effectSize'
 
-          .  power twomeans 53 `lowerMean', sd(9.900891) power(0.9)
+.  power twomeans 53 `lowerMean', sd(9.900891) power(0.9)
 
-          Performing iteration ...
+Performing iteration ...
 
-          Estimated sample sizes for a two-sample means test
-          t test assuming sd1 = sd2 = sd
-          Ho: m2 = m1  versus  Ha: m2 != m1
+Estimated sample sizes for a two-sample means test
+t test assuming sd1 = sd2 = sd
+Ho: m2 = m1  versus  Ha: m2 != m1
 
-          Study parameters:
+Study parameters:
 
-                  alpha =    0.0500
-                  power =    0.9000
-                  delta =   -4.9504
-                     m1 =   53.0000
-                     m2 =   48.0496
-                     sd =    9.9009
+      alpha =    0.0500
+      power =    0.9000
+      delta =   -4.9504
+         m1 =   53.0000
+         m2 =   48.0496
+         sd =    9.9009
 
-          Estimated sample sizes:
+Estimated sample sizes:
 
-                      N =       172
-            N per group =        86
-
-
+          N =       172
+N per group =        86
+```
 
 **11.** Based on the output above in question **5**, we estimate a mean science score for men as 53, for women as 48.050, with a standard deviation of 9.901, as pilot data to con struct the power analysis. To detect a moderate effect size with a power of 0.9, a sample size of 172 would be required with a minimum of 86 in each group.
 
