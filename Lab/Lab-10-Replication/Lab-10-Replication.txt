@@ -1,0 +1,762 @@
+--------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/herb/Desktop/Lab-10-Replication/Lab-10-Replication.txt
+  log type:  text
+ opened on:   5 Nov 2016, 21:43:43
+
+. 
+. // ==========================================================================
+. 
+. /*
+> file name - master.do
+> 
+> project name - SOC5050: Quantitative Analysis, Fall 2016
+> 
+> purpose - Replicate's Lab 10 - Difference of Means (2)
+> 
+> created - 05 Nov 2016
+> 
+> updated - 05 Nov 2016
+> 
+> author - CHRIS
+> */
+. 
+. // ==========================================================================
+. 
+. /*
+> full description -
+> This do-file replicates Lab 10, which involves running a number of different
+> one-sample, independent samples, and dependent samples t-tests.
+> */
+. 
+. /*
+> updates -
+> none
+> */
+. 
+. // ==========================================================================
+. 
+. /*
+> superordinates  -
+> - hsb2.dta
+> */
+. 
+. /*
+> subordinates -
+> - data.do
+> - analysis.do
+> */
+. 
+. // ==========================================================================
+. 
+. // copy source data to new directory
+. 
+. use "http://www.ats.ucla.edu/stat/stata/notes/hsb2", clear
+(highschool and beyond (200 cases))
+
+. global newData "standardTestData.dta"
+
+. save "$projName/$newData", replace
+file Lab-10-Replication/standardTestData.dta saved
+
+. 
+. // ==========================================================================
+. // ==========================================================================
+. // ==========================================================================
+. 
+. // 1. execute data cleaning file
+. // do "data.do"
+. 
+. // 2. execute data analysis / markdoc file
+. do "analysis.do"
+
+. // ==========================================================================
+. 
+. // Lab 10 Analysis
+. 
+. // ==========================================================================
+. 
+. // standard opening options
+. 
+. set more off
+
+. set linesize 80
+
+. 
+. // ==========================================================================
+. 
+. /*
+> file name - analysis.do
+> 
+> project name - SOC5050: Quantitative Analysis, Fall 2016
+> 
+> purpose - Statistical output and plots for Lab 10
+> 
+> created - 05 Nov 2016
+> 
+> updated - 05 Nov 2016
+> 
+> author - CHRIS
+> */
+. 
+. // ==========================================================================
+. 
+. /*
+> full description -
+> This do-file exectues analytical commands and creates plots for Lab 10.
+> */
+. 
+. /*
+> updates -
+> none
+> */
+. 
+. // ==========================================================================
+. 
+. /*
+> superordinates  -
+> - hsb2.dta
+> - master.do
+> */
+. 
+. /*
+> subordinates -
+> none
+> */
+. 
+. // ==========================================================================
+. // ==========================================================================
+. // ==========================================================================
+. 
+. // start MarkDoc log
+. quietly log using "$projName/$projName-markdoc.smcl", ///
+>   replace smcl name(markdoc)
+
+. 
+. // OFF
+. // ==========================================================================
+. // ON
+. 
+. /***
+> # Lab 11
+>   - SOC 5050: Quantitative Analysis
+>   - 05 Nov 2016
+>   - CHRIS
+> 
+> ### Part 1 - One-Sample T-Test
+> ***/
+. 
+. ttest socst==54
+
+One-sample t test
+------------------------------------------------------------------------------
+Variable |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+   socst |     200      52.405    .7591352    10.73579    50.90802    53.90198
+------------------------------------------------------------------------------
+    mean = mean(socst)                                            t =  -2.1011
+Ho: mean = 54                                    degrees of freedom =      199
+
+    Ha: mean < 54               Ha: mean != 54                 Ha: mean > 54
+ Pr(T < t) = 0.0184         Pr(|T| > |t|) = 0.0369          Pr(T > t) = 0.9816
+
+. 
+. //OFF
+. // set local macros
+. local t = round(r(t),.001)
+
+. local p = round(r(p),.001)
+
+. 
+. // collapse dataset
+. collapse (mean) mean = socst (sd) sd = socst (count) n = socst
+
+. 
+. // caclulate stnadard error
+. generate se = sd/sqrt(n)
+
+. 
+. // create categorical indicator
+. generate cat = 1
+
+. 
+. // generate plot
+. serrbar mean se cat, scale(1.96) ///
+>         yline(54, lcolor(red)) yscale(r(49.9 55.1)) ///
+>         ylabel(50(1)55, grid) ytitle("Mean Social Studies Score") ///
+>         xlabel(none) xtitle("") ///
+>         scheme(s2mono) ///
+>         graphregion(color("235 235 235")) ///
+>         plotregion(color("255 255 255")) ///
+>         bgcolor("235 235 235") ///
+>   title("One Sample T-Test: Social Studies Score and {&mu}=54") ///
+>         text(54.1 1 "{&mu}", place(n)) ///
+>   note("Results: {it:t} = `t', {it:p} = `p'") ///
+>         caption("Produced by Christopher Prener, Ph.D.; Data via UCLA ATS")
+
+. 
+. // explort plot
+. graph export "$projName/Plots/fig1.png", ///
+>   as(png) width(1000) height(750) replace
+(file Lab-10-Replication/Plots/fig1.png written in PNG format)
+
+. 
+. // reopen data
+. use "$projName/$newData", clear
+(highschool and beyond (200 cases))
+
+. 
+. //ON
+. 
+. /***
+> ![fig1](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-1
+> 0-Replication/Plots/fig1.png)
+> ***/
+. 
+. txt "**1.** The results of the one-sample t-test (t = " `t' "; p = " ///
+>   `p' ") indicate that these data are not drawn from where " ///
+>   "the average score is 54."
+
+
+> **1.** The results of the one-sample t-test (t = -2.101 ; p = .037 ) indicate 
+> that these data are not drawn from where the average score is 54.
+. 
+. ttest science==54
+
+One-sample t test
+------------------------------------------------------------------------------
+Variable |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+ science |     200       51.85    .7000987    9.900891    50.46944    53.23056
+------------------------------------------------------------------------------
+    mean = mean(science)                                          t =  -3.0710
+Ho: mean = 54                                    degrees of freedom =      199
+
+    Ha: mean < 54               Ha: mean != 54                 Ha: mean > 54
+ Pr(T < t) = 0.0012         Pr(|T| > |t|) = 0.0024          Pr(T > t) = 0.9988
+
+. 
+. //OFF
+. // set local macros for key values
+. local t = round(r(t),.001)
+
+. local p = round(r(p),.001)
+
+. 
+. // collapse dataset
+. collapse (mean) mean = science (sd) sd = science (count) n = science
+
+. 
+. // caclulate stnadard error
+. generate se = sd/sqrt(n)
+
+. 
+. // create categorical indicator
+. generate cat = 1
+
+. 
+. // generate plot
+. serrbar mean se cat, scale(1.96) ///
+>         yline(54, lcolor(red)) yscale(r(49.9 55.1)) ///
+>         ylabel(50(1)55, grid) ytitle("Mean Science Score") ///
+>         xlabel(none) xtitle("") ///
+>         scheme(s2mono) ///
+>         graphregion(color("235 235 235")) ///
+>         plotregion(color("255 255 255")) ///
+>         bgcolor("235 235 235") ///
+> title("One Sample T-Test: Science Score and {&mu}=54") ///
+>         text(54.1 1 "{&mu}", place(n)) ///
+>   note("Results: {it:t} = `t', {it:p} = `p'") ///
+>         caption("Produced by Christopher Prener, Ph.D.; Data via UCLA ATS")
+
+. 
+. // export plot
+. graph export "$projName/Plots/fig2.png", ///
+>   as(png) width(1000) height(750) replace
+(file Lab-10-Replication/Plots/fig2.png written in PNG format)
+
+. 
+. // reopen dataset
+. use "$projName/$newData", clear
+(highschool and beyond (200 cases))
+
+. 
+. //ON
+. 
+. /***
+> ![fig2](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-1
+> 0-Replication/Plots/fig2.png)
+> ***/
+. 
+. txt "**2.** Like question **1**, the results of the one-sample " ///
+>   "t-test (t = " `t' "; p = " `p' ") indicate that these " ///
+>   "data are not drawn from where the average score is 54."
+
+
+> **2.** Like question **1**, the results of the one-sample t-test (t = -3.071 ;
+>  p = .002 ) indicate that these data are not drawn from where the average scor
+> e is 54.
+. 
+. /***
+> ### Part 2 - Independent T-Test
+> ***/
+. 
+. sdtest science, by(female)
+
+Variance ratio test
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+    male |      91    53.23077    1.125037    10.73217    50.99569    55.46585
+  female |     109    50.69725    .8657315    9.038503    48.98122    52.41328
+---------+--------------------------------------------------------------------
+combined |     200       51.85    .7000987    9.900891    50.46944    53.23056
+------------------------------------------------------------------------------
+    ratio = sd(male) / sd(female)                                 f =   1.4099
+Ho: ratio = 1                                    degrees of freedom =  90, 108
+
+    Ha: ratio < 1               Ha: ratio != 1                 Ha: ratio > 1
+  Pr(F < f) = 0.9562         2*Pr(F > f) = 0.0876           Pr(F > f) = 0.0438
+
+. 
+. txt "**3.** The results of the Levene's test (f = " %10.3f r(F) "; p = " ///
+>   %10.3f r(p) ") indicate that the assumption of homogenetiy of variance" ///
+>   " holds for these data. The variance of science scores for men is " ///
+>   "not significantly different from the variance of science scores for women."
+
+
+> **3.** The results of the Levene's test (f = 1.410; p = 0.088) indicate that t
+> he assumption of homogenetiy of variance holds for these data. The variance of
+>  science scores for men is not significantly different from the variance of sc
+> ience scores for women.
+. 
+. ttest science, by(female)
+
+Two-sample t test with equal variances
+------------------------------------------------------------------------------
+   Group |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+    male |      91    53.23077    1.125037    10.73217    50.99569    55.46585
+  female |     109    50.69725    .8657315    9.038503    48.98122    52.41328
+---------+--------------------------------------------------------------------
+combined |     200       51.85    .7000987    9.900891    50.46944    53.23056
+---------+--------------------------------------------------------------------
+    diff |            2.533522    1.397901                -.223164    5.290207
+------------------------------------------------------------------------------
+    diff = mean(male) - mean(female)                              t =   1.8124
+Ho: diff = 0                                     degrees of freedom =      198
+
+    Ha: diff < 0                 Ha: diff != 0                 Ha: diff > 0
+ Pr(T < t) = 0.9643         Pr(|T| > |t|) = 0.0714          Pr(T > t) = 0.0357
+
+. 
+. //OFF
+. 
+. // store value of t
+. local t = round(r(t),.001)
+
+. 
+. // store value of p
+. local p = round(r(p),.0001)
+
+. 
+. //ON
+. 
+. esize twosample science, by(female) cohensd
+
+Effect size based on mean comparison
+
+                               Obs per group:
+                                        male =         91
+                                      female =        109
+---------------------------------------------------------
+        Effect Size |   Estimate     [95% Conf. Interval]
+--------------------+------------------------------------
+          Cohen's d |    .257353    -.0224299    .5364914
+---------------------------------------------------------
+
+. 
+. //OFF
+. // store value of d
+. local d = round(r(d),.001)
+
+. 
+. // collapse dataset
+. collapse (mean) mean = science (sd) sd = science (count) n = science, by(femal
+> e)
+
+. 
+. // calculate standard error
+. generate se = sd/sqrt(n)
+
+. 
+. // generate plot
+. serrbar mean se female, scale(1.96)  ///
+>         ytitle("Mean Science Scores") ///
+>         xscale(r(-.2 1.2)) ///
+>         xlabel(0 "male" 1 "female") xtitle("Gender") ///
+>         scheme(s2mono) ///
+>         graphregion(color("235 235 235")) ///
+>         plotregion(color("255 255 255")) ///
+>         bgcolor("235 235 235") ///
+>         title("Two Sample T-Test: Science Scores by Gender") ///
+>         note("Results: {it:t} = `t', {it:p} = `p', Cohen's {it:d} = `d'") ///
+>         caption("Produced by Christopher Prener, Ph.D.; Data via UCLA ATS")
+
+. 
+. // export plot
+. graph export "$projName/Plots/fig3.png", ///
+>   as(png) width(1000) height(750) replace
+(file Lab-10-Replication/Plots/fig3.png written in PNG format)
+
+. 
+. // reopen dataset
+. use "$projName/$newData", clear
+(highschool and beyond (200 cases))
+
+. //ON
+. 
+. /***
+> ![fig3](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-1
+> 0-Replication/Plots/fig3.png)
+> ***/
+. 
+. txt "**5.** The results of the independent t-test (t = " `t' "; p = " ///
+>   `p' "; d = " `d' ") indicate that there is not a substantive difference" ///
+>   " in mean science scores between males and females in this sample."
+
+
+> **5.** The results of the independent t-test (t = 1.812 ; p = .0714 ; d = .257
+>  ) indicate that there is not a substantive difference in mean science scores 
+> between males and females in this sample.
+. 
+. txt "**6.** The results of the Cohen's d test (d = " `d' ") are " ///
+>   "consistent with there not being a substantive difference in mean " ///
+>   "science scores by gender - the reported effect size is small."
+
+
+> **6.** The results of the Cohen's d test (d = .257 ) are consistent with there
+>  not being a substantive difference in mean science scores by gender - the rep
+> orted effect size is small.
+. 
+. /***
+> ### Part 3 - Dependent T-test
+> ***/
+. 
+. ttest write==socst
+
+Paired t test
+------------------------------------------------------------------------------
+Variable |     Obs        Mean    Std. Err.   Std. Dev.   [95% Conf. Interval]
+---------+--------------------------------------------------------------------
+   write |     200      52.775    .6702372    9.478586    51.45332    54.09668
+   socst |     200      52.405    .7591352    10.73579    50.90802    53.90198
+---------+--------------------------------------------------------------------
+    diff |     200         .37    .6403638    9.056112   -.8927696     1.63277
+------------------------------------------------------------------------------
+     mean(diff) = mean(write - socst)                             t =   0.5778
+ Ho: mean(diff) = 0                              degrees of freedom =      199
+
+ Ha: mean(diff) < 0           Ha: mean(diff) != 0           Ha: mean(diff) > 0
+ Pr(T < t) = 0.7180         Pr(|T| > |t|) = 0.5641          Pr(T > t) = 0.2820
+
+. 
+. //OFF
+. 
+. // store value of t
+. local t = round(r(t),.001)
+
+. 
+. // store value of p
+. local p : display %-10.3f r(p)
+
+. 
+. // store mean, standard deviation, and n for read
+. local mean1 = r(mu_1)
+
+. local sd1 = r(sd_1)
+
+. local n1 = r(N_1)
+
+. 
+. // store mean, standard deviation, and n for write
+. local mean2 = r(mu_2)
+
+. local sd2 = r(sd_2)
+
+. local n2 = r(N_2)
+
+. 
+. // clear loaded dataset
+. clear
+
+. 
+. // create simple dataset for summary data
+. set obs 2
+number of observations (_N) was 0, now 2
+
+. 
+. // create variables
+. generate cat = .
+(2 missing values generated)
+
+. generate mean = .
+(2 missing values generated)
+
+. generate sd = .
+(2 missing values generated)
+
+. generate n = .
+(2 missing values generated)
+
+. 
+. // add summary data for write
+. replace cat = 0 in 1
+(1 real change made)
+
+. replace mean = `mean1' in 1
+(1 real change made)
+
+. replace sd = `sd1' in 1
+(1 real change made)
+
+. replace n = `n1' in 1
+(1 real change made)
+
+. 
+. // add summary data for social science
+. replace cat = 1 in 2
+(1 real change made)
+
+. replace mean = `mean2' in 2
+(1 real change made)
+
+. replace sd = `sd2' in 2
+(1 real change made)
+
+. replace n = `n2' in 2
+(1 real change made)
+
+. 
+. // calculate standard error
+. generate se = sd/sqrt(n)
+
+. 
+. // generate plot
+. serrbar mean se cat, scale(1.96) ///
+>   yscale(r(49.9 55.1)) ///
+>   ylabel(50(1)55, grid) ytitle("Mean Scores") ///
+>         xscale(r(-.2 1.2)) ///
+>         xlabel(0 "writing" 1 "social science") xtitle("Score Type") ///
+>         scheme(s2mono) ///
+>         graphregion(color("235 235 235")) ///
+>         plotregion(color("255 255 255")) ///
+>         bgcolor("235 235 235") ///
+>         title("Dependent Sample T-Test:") ///
+>   subtitle("Writing and Social Science Scores") ///
+>         note("Results: {it:t} = `t', {it:p} = `p'") ///
+>         caption("Produced by Christopher Prener, Ph.D.; Data via UCLA ATS")
+
+. 
+. // export plot
+. graph export "$projName/Plots/fig4.png", ///
+>   as(png) width(1000) height(750) replace
+(file Lab-10-Replication/Plots/fig4.png written in PNG format)
+
+. 
+. // clear dataset
+. clear
+
+. 
+. //ON
+. 
+. /***
+> ![fig4](https://raw.githubusercontent.com/slu-soc5050/Week-10/master/Lab/Lab-1
+> 0-Replication/Plots/fig4.png)
+> ***/
+. 
+. txt "**8.** The results of the dependent t-test (t = " `t' "; p = " ///
+>   `p' "; d = " `d' ") indicate that there is not a substantive difference" ///
+>   " between mean writing and social science scores in this sample."
+
+
+> **8.** The results of the dependent t-test (t = .578 ; p = 0.564      ; d = .2
+> 57 ) indicate that there is not a substantive difference between mean writing 
+> and social science scores in this sample.
+. 
+. /***
+> ### Part 4 - Power Analyses
+> ***/
+. 
+. local effectSize = 9.900891*.2
+
+. local lowerMean = 53-`effectSize'
+
+. 
+. power twomeans 53 `lowerMean', sd(9.900891) power(0.8)
+
+Performing iteration ...
+
+Estimated sample sizes for a two-sample means test
+t test assuming sd1 = sd2 = sd
+Ho: m2 = m1  versus  Ha: m2 != m1
+
+Study parameters:
+
+        alpha =    0.0500
+        power =    0.8000
+        delta =   -1.9802
+           m1 =   53.0000
+           m2 =   51.0198
+           sd =    9.9009
+
+Estimated sample sizes:
+
+            N =       788
+  N per group =       394
+
+. 
+. txt "**10.** We use the output above in question **5**, we estimate " ///
+>   "a mean science score for men as 53, for women as " ///
+>   %10.3f `lowerMean' ", with a standard deviation of " %10.3f r(sd) ", " ///
+>   "as pilot data to construct the power analysis. To detect a " ///
+>   "small effect size with a power of 0.8, a sample size of " ///
+>   r(N) " would be required with a minimum of " r(N1) " in each group."
+
+
+> **10.** We use the output above in question **5**, we estimate a mean science 
+> score for men as 53, for women as 51.020, with a standard deviation of 9.901as
+>  pilot data to construct the power analysis. To detect a small effect size wit
+> h a power of 0.8, a sample size of 788 would be required with a minimum of 394
+>  in each group.
+. 
+. local effectSize = 9.900891*.5
+
+. local lowerMean = 53-`effectSize'
+
+. 
+. power twomeans 53 `lowerMean', sd(9.900891) power(0.9)
+
+Performing iteration ...
+
+Estimated sample sizes for a two-sample means test
+t test assuming sd1 = sd2 = sd
+Ho: m2 = m1  versus  Ha: m2 != m1
+
+Study parameters:
+
+        alpha =    0.0500
+        power =    0.9000
+        delta =   -4.9504
+           m1 =   53.0000
+           m2 =   48.0496
+           sd =    9.9009
+
+Estimated sample sizes:
+
+            N =       172
+  N per group =        86
+
+. 
+. txt "**11.** Based on the output above in question **5**, we estimate " ///
+>   "a mean science score for men as 53, for women as " ///
+>   %10.3f `lowerMean' ", with a standard deviation of " %10.3f r(sd) ", " ///
+>   "as pilot data to construct the power analysis. To detect a " ///
+>   "moderate effect size with a power of 0.9, a sample size of " ///
+>   r(N) " would be required with a minimum of " r(N1) " in each group."
+
+
+> **11.** Based on the output above in question **5**, we estimate a mean scienc
+> e score for men as 53, for women as 48.050, with a standard deviation of 9.901
+> as pilot data to construct the power analysis. To detect a moderate effect siz
+> e with a power of 0.9, a sample size of 172 would be required with a minimum o
+> f 86 in each group.
+. 
+. local effectSize = 9.900891*.8
+
+. local lowerMean = 53-`effectSize'
+
+. 
+. power twomeans 53 `lowerMean', sd(9.900891) power(0.9)
+
+Performing iteration ...
+
+Estimated sample sizes for a two-sample means test
+t test assuming sd1 = sd2 = sd
+Ho: m2 = m1  versus  Ha: m2 != m1
+
+Study parameters:
+
+        alpha =    0.0500
+        power =    0.9000
+        delta =   -7.9207
+           m1 =   53.0000
+           m2 =   45.0793
+           sd =    9.9009
+
+Estimated sample sizes:
+
+            N =        68
+  N per group =        34
+
+. 
+. txt "**12.** Based on the output above in question **5**, we estimate " ///
+>   "a mean science score for men as 53, for women as " ///
+>   %10.3f `lowerMean' ", with a standard deviation of " %10.3f r(sd) ", " ///
+>   "as pilot data to construct the power analysis. To detect a " ///
+>   "large effect size with a power of 0.8, a sample size of " ///
+>   r(N) " would be required with a minimum of " r(N1) " in each group."
+
+
+> **12.** Based on the output above in question **5**, we estimate a mean scienc
+> e score for men as 53, for women as 45.079, with a standard deviation of 9.901
+> as pilot data to construct the power analysis. To detect a large effect size w
+> ith a power of 0.8, a sample size of 68 would be required with a minimum of 34
+>  in each group.
+. 
+. // OFF
+. // ==========================================================================
+. 
+. // end MarkDoc log
+. quietly log close markdoc
+
+. 
+. // convert MarkDoc log to Markdown
+. markdoc "$projName/$projName-markdoc", ///
+>   replace export(md) install
+
+(MarkDoc created Lab-10-Replication/Lab-10-Replication-markdoc.md)
+
+
+. 
+. // ==========================================================================
+. // ==========================================================================
+. // ==========================================================================
+. 
+. // exit
+. 
+end of do-file
+
+. 
+. // ==========================================================================
+. // ==========================================================================
+. // ==========================================================================
+. 
+. // copy code to code archive
+. 
+. copy "master.do" "$projName/CodeArchive/master.do", replace
+
+. // copy "data.do" "$projName/CodeArchive/data.do", replace
+. copy "analysis.do" "$projName/CodeArchive/analysis.do", replace
+
+. 
+. // ==========================================================================
+. 
+. // standard closing options
+. 
+. log close _all
+      name:  <unnamed>
+       log:  /Users/herb/Desktop/Lab-10-Replication/Lab-10-Replication.txt
+  log type:  text
+ closed on:   5 Nov 2016, 21:43:52
+--------------------------------------------------------------------------------
