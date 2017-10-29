@@ -1,0 +1,64 @@
+---
+title: "Weekly Prep 10 Replication"
+output: html_notebook
+---
+
+## Introduction
+This is the replication file for Week 10's Weekly Prep.
+
+## Dependencies
+This file uses the `ggplot2` package for plotting and data:
+
+```{r}
+library(ggplot2)
+```
+
+## Load Data
+We'll assign the `mpg` data from `ggplot2` to a data frame object named `autoData`:
+
+```{r}
+autoData <- mpg
+```
+
+
+## Questions
+### Question 1
+
+The following code replicates the scatterplot show in Section 3.2.2 of R for Data Science:
+
+```{r}
+ggplot(data = autoData) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+This plot shows that, as engine displacement increases along the x axis, the corresponding values for each observation's highway fuel efficiency decrease on the y axis.
+
+#### Saving Plots
+
+Since you'll want to include plots in your draft presentation, I want to show you quickly how to save them. The `ggsave()` function is used for this purpose. You can specify the file name *and* extension in double quotes, and provide some additional parameters like the height, width, and dots-per-inch of the resulting file. I've set this output up so that it creates a plot that is 800 points (282 mm) by 600 points (211 mm) at 500 dpi. This is a good approximate size for presentations, though you'll have to tweak the settings for your own slides.
+
+```{r}
+ggsave("week-10-prep-fig1.png", width = 282, height = 211, units = "mm", dpi = 500)
+```
+
+### Question 2
+
+The following code creates a scatterplot of the variables `hwy` and `cyl`:
+
+```{r}
+ggplot(data = autoData) + 
+  geom_point(mapping = aes(x = cyl, y = hwy))
+```
+
+This looks a bit awkward because `cyl` has a discrete number of values. You can see the variations in highway fuel efficiency do generally decrease as the number of engine cylinders in a car increases along the x axis.
+
+### Question 3
+
+The following code creates a scatterplot of the variables `class` and `drv`:
+
+```{r}
+ggplot(data = autoData) + 
+  geom_point(mapping = aes(x = class, y = drv))
+```
+
+The plot is not useful because both variables are discrete, so we end up with only a small number of possible combinations where all of the x and y values are the same, so the points layer on top of each other. Scatterplots are best for comparing continuous variables.
