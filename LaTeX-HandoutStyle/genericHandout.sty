@@ -1,0 +1,20 @@
+%%% Page layout adjustment for generic conference handout
+%%% Christiopher Prener, Ph.D.
+
+% set page dimensions
+\usepackage[letterpaper, margin=1in]{geometry}
+
+% set title format
+\usepackage{titling}
+
+\setlength{\droptitle}{-5em}
+
+\pretitle{\begin{flushleft}\LARGE}
+\posttitle{\par\end{flushleft}}
+\preauthor{\begin{flushleft}\large}
+\postauthor{\par\end{flushleft}}
+\predate{\begin{flushleft}\large}
+\postdate{\par\end{flushleft}}
+
+% remove page numbers
+\pagenumbering{gobble}

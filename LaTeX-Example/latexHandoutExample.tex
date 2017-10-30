@@ -1,0 +1,58 @@
+\documentclass[10pt]{article}
+
+% load style file
+\usepackage{genericHandout}
+
+% add ability to include author affiliations
+\usepackage{authblk}
+
+\def\conference{Paper presented at the 2017 American Sociological Association Annual Meeting in Montréal, Quebec.}
+
+% define title
+\title{Sample Conference Handout\thanks{\conference}}
+\author[1]{Christopher Prener, Ph.D.}
+\affil[1]{Department of Sociology and Anthropology, Saint Louis University}
+\date{October 30, 2017}
+
+% for sample paper ONLY
+\usepackage{lipsum}
+
+\begin{document}
+
+\maketitle
+
+\section*{Abstract}
+\lipsum[1]
+
+\section*{Hypotheses}
+\begin{itemize}
+\item H\textsubscript{1} - Suspendisse vitae elit.
+\item H\textsubscript{2} - Aliquam arcu neque, ornare in, ullamcorper quis, commodo eu, libero.
+\end{itemize}
+
+\section*{Descriptive Statistics}
+\begin{table}[!htbp] \centering 
+  \caption{Descriptive Statistics} 
+  \label{tbl:descriptiveStats} 
+\begin{tabular}{@{\extracolsep{5pt}}lccccc} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+Statistic & \multicolumn{1}{c}{N} & \multicolumn{1}{c}{Mean} & \multicolumn{1}{c}{St. Dev.} & \multicolumn{1}{c}{Min} & \multicolumn{1}{c}{Max} \\ 
+\hline \\[-1.8ex] 
+Displacement & 234 & 3.472 & 1.292 & 1.600 & 7.000 \\ 
+Year & 234 & 2,003.500 & 4.510 & 1,999 & 2,008 \\ 
+Cylinders & 234 & 5.889 & 1.612 & 4 & 8 \\ 
+Fuel Efficiency, City & 234 & 16.859 & 4.256 & 9 & 35 \\ 
+Fuel Efficiency, Highway & 234 & 23.440 & 5.955 & 12 & 44 \\ 
+\hline \\[-1.8ex] 
+\end{tabular} 
+\end{table} 
+
+\section*{Key References}
+[insert references here]
+
+\newpage
+\section*{Regression Results}
+[insert regression table here]
+
+\end{document}
